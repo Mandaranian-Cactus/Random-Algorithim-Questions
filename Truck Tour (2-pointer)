@@ -27,3 +27,42 @@ negative at any time of the traversal, it means that we effectively cannot conti
 pointer until we actually have gas. THIS IS THE MOST IMPORTANT PART AS WHAT ARE DOING IS CHECKING ALL POSSIBLE AND UNVISITED STARTING 
 POSITIONS. Since popping from queue takes O(1) time, we can reach O(n) time. Our break condition is when the left pointer revisites the 
 right pointer.
+
+---------------------------------------------------- C++ IMPLEMENTATION  ---------------------------------------------------------------
+
+#include <iostream>
+using namespace std;
+
+pair<int, int> arr[1000000];
+int main()
+{
+    int n;
+    cin >> n;
+    for (int i = 0; i < n; i++){
+         int a, b;  // Value and distance to next station
+         cin >> a >> b;
+         arr[i] = {a, b};
+    }
+    
+    long long sum = 0;
+    int l_pointer = 0, r_pointer = 1;
+    sum += arr[l_pointer].first - arr[l_pointer].second;
+    
+    while (l_pointer != r_pointer){
+        while (sum < 0){
+            sum -= (arr[l_pointer].first - arr[l_pointer].second);
+            l_pointer = (l_pointer + 1) % n;    // Used to cycle back
+            
+            if (l_pointer == 0){
+                cout << "-1" << endl;   // Impossible starting position
+                return 0;
+            }
+        }
+        
+        sum += arr[r_pointer].first - arr[r_pointer].second;
+        r_pointer = (r_pointer + 1) % n;
+    }
+    
+    cout << l_pointer << endl;
+    
+}
