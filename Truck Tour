@@ -1,0 +1,29 @@
+https://www.hackerrank.com/contests/challenge/challenges/truck-tour
+https://www.geeksforgeeks.org/find-a-tour-that-visits-all-stations/
+
+Naive solution: O(n ^ 2)
+The solution largely relies on brute forcing. 
+We choose every possible starting position, lookping O(n) time
+Since we do this n times, the time complexity is O(n ^ 2)
+
+Queue solution: O(n)
+The better solution relies on a queue implementation
+In essence, we rely on 2 main key points of the question
+#1: We need to traverse all stations almost in a circle patter
+#2: A solution is guarenteed (This part isn't really important however I'm lazy and this makes it simpler)
+
+The approach is similair to brute forcing however what makes it unique is the approach to minimize repetition.
+Note that if we were to loop from example position 3 and traverse 100 cars back to position 3, we would essentially have covered 100 cars
+Now assume that position 3 is invalid as a starting position and we choose position 4 to start from. We Travel another 100 cars and return
+to position 4. Notice that we have not effectively revisited around 100 cars. If we continue to do this for positon 5, 6, 7.... we would
+continue this repetition. The better solution is to instead rely on memorizing our data into a queue.
+
+We start by having an empty queue, a position located at 0, amount of diesel we current have, and pointers left and right pointer at 
+position 0. Wherever the right pointer is we need to add the diesel cost for the present gas station and subtract it by the distance to 
+the next station. So at the start, the amount of diesel in the tank should be equal to arr[0][0] - arr[0][1] where arr[0][0] is the diesel 
+supply at station 0 and arr[0][1] is distance to the next diesel station. Following preprocessing (sorta), we continually move the right 
+pointer. The right pointer moves right 1 and for everytime that it does, we readjust the amount of diesel in the tank. If the tank reaches
+negative at any time of the traversal, it means that we effectively cannot continue traversal. Here, we would begin to adjust the left
+pointer until we actually have gas. THIS IS THE MOST IMPORTANT PART AS WHAT ARE DOING IS CHECKING ALL POSSIBLE AND UNVISITED STARTING 
+POSITIONS. Since popping from queue takes O(1) time, we can reach O(n) time. Our break condition is when the left pointer revisites the 
+right pointer.
